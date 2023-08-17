@@ -409,24 +409,43 @@
                     </h5>
                   </div>
                   <div>
-                    <form id="submit-form" action="" class=" p-4 p-md-5 contact-form">
-                      <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Name" name="name" required>
-                      </div>
-                      <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Email" name="email" required>
-                      </div>
-                      <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Subject" name="subject" required>
-                      </div>
-                      <div class="form-group">
-                        <textarea name="message" cols="30" rows="7" class="form-control" placeholder="Message" required></textarea>
-                      </div>
-                      <div class="form-group">
-                        <input type="submit" value="Send Message" class="btn btn-primary py-9 px-9">
+                    <form id="submit-form" role="form" class="contactForm" action="">
+                      <div id="sendmessage">Your message has been sent. Thank you!</div>
+                      <div id="errormessage"></div>
+                      <div class="row">
+                        <div class="col-md-12 mb-3">
+                          <div class="form-group">
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required/>
+                            <div class="validation"></div>
+                            <div class="validation-message" id="validation-name"></div> <!-- Validation message for name -->
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                          <div class="form-group">
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" disabled required/>
+                            <div class="validation"></div>
+                            <div class="validation-message" id="validation-email"></div> <!-- Validation message for email -->
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                          <div class="form-group">
+                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" required/>
+                            <div class="validation"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                          <div class="form-group">
+                            <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+                            <div class="validation"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <button type="submit" class="button button-a button-big button-rouded" id="submit-button" disabled>Send Message</button>
+                        </div>
                       </div>
                     </form>
-                  </div>
+                    <!-- form Ends here -->
+                 </div>
                 </div>
                 <div class="col-md-6">
                   <div class="title-box-2 pt-4 pt-md-0">
@@ -483,7 +502,7 @@
   <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
   <div id="preloader"></div>
 
-  <script>
+  <!-- <script>
     $("#submit-form").submit((e)=>{
         e.preventDefault()
         $.ajax({
@@ -501,7 +520,90 @@
             }
         })
     })
+</script> -->
+<script>
+  // Validation functions
+function validateName(name) {
+  return /^[a-zA-Z]+$/.test(name); // Only alphabets allowed
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Basic email format validation
+}
+
+  // Toggle submit button based on validation
+  function toggleSubmitButton() {
+    const nameValid = validateName($("#name").val());
+    const emailValid = validateEmail($("#email").val());
+    const submitButton = $("#submit-button"); // Cache the submit button element
+
+    if (nameValid && emailValid) {
+      submitButton.prop("disabled", false);
+      submitButton.removeClass("disabled-button"); // Remove the disabled button style
+      $("#validation-message").text(""); // Clear validation message
+    } else {
+      submitButton.prop("disabled", true);
+      submitButton.addClass("disabled-button"); // Add the disabled button style
+      $("#validation-message").text("Please fill in valid name and email.");
+    }
+  }
+
+  // Name field validation on blur
+  $("#name").blur(function () {
+    const nameInput = $(this);
+    const name = nameInput.val();
+
+    if (name === "") {
+      nameInput.addClass("invalid");
+      $("#validation-name").text("Name is required.");
+    } else if (!validateName(name)) {
+      nameInput.addClass("invalid");
+      $("#validation-name").text("Name can only contain alphabets.");
+    } else {
+      nameInput.removeClass("invalid");
+      $("#validation-name").text("");
+      $("#email").prop("disabled", false);
+    }
+
+    toggleSubmitButton();
+  });
+
+  // Email field validation on blur
+  $("#email").blur(function () {
+    const emailInput = $(this);
+    const email = emailInput.val();
+
+    if (validateEmail(email)) {
+      emailInput.removeClass("invalid");
+      $("#validation-email").text("");
+    } else {
+      emailInput.addClass("invalid");
+      $("#validation-email").text("Please enter a valid email.");
+    }
+
+    toggleSubmitButton();
+  });
+
+  // Form submission
+  $("#submit-form").submit(function (e) {
+    e.preventDefault();
+
+    $.ajax({
+      url: "https://script.google.com/macros/s/AKfycbyj3wH1YCgJue7YffrFxl8FSE4QLmbwUK3IaHEb-oRbNQFUaeXnWK6xAddVn0jh8YIX/exec",
+      data: $("#submit-form").serialize(),
+      method: "post",
+      success: function (response) {
+        alert("Form submitted successfully");
+        window.location.reload();
+        window.location.href = "index.html";
+      },
+      error: function (err) {
+        alert("Something Error");
+      }
+    });
+  });
 </script>
+
 
   <!-- JavaScript Libraries -->
   <script src="lib/jquery/jquery.min.js"></script>
