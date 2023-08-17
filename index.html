@@ -22,6 +22,7 @@
 
   <!-- Main Stylesheet File -->
   <link href="css/style.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   
 </head>
@@ -65,7 +66,7 @@
   <!--/ Nav End /-->
 
   <!--/ Intro Skew Star /-->
-  <div id="home" class="intro route bg-image" style="background : rgb(32, 147, 205)">
+  <div id="home" class="intro route bg-image" style="background : rgb(0, 123, 255)">
     <div class="overlay-itro"></div>
     <div class="intro-content display-table">
       <div class="table-cell">
@@ -408,7 +409,7 @@
                     </h5>
                   </div>
                   <div>
-                    <form action="https://formsubmit.co/sugithkodappurath@gmail.com" method="POST" class=" p-4 p-md-5 contact-form">
+                    <form id="submit-form" action="" class=" p-4 p-md-5 contact-form">
                       <div class="form-group">
                         <input type="text" class="form-control" placeholder="Your Name" name="name" required>
                       </div>
@@ -481,6 +482,26 @@
 
   <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
   <div id="preloader"></div>
+
+  <script>
+    $("#submit-form").submit((e)=>{
+        e.preventDefault()
+        $.ajax({
+            url:"https://script.google.com/macros/s/AKfycbyj3wH1YCgJue7YffrFxl8FSE4QLmbwUK3IaHEb-oRbNQFUaeXnWK6xAddVn0jh8YIX/exec",
+            data:$("#submit-form").serialize(),
+            method:"post",
+            success:function (response){
+                alert("Form submitted successfully")
+                window.location.reload()
+                window.location.href="index.html"
+            },
+            error:function (err){
+                alert("Something Error")
+
+            }
+        })
+    })
+</script>
 
   <!-- JavaScript Libraries -->
   <script src="lib/jquery/jquery.min.js"></script>
